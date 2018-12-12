@@ -23,8 +23,7 @@ const int PIR_Pin = 2;
 const int dipPin = 3;
 const int photoResPin= 2;
 const int varResPin = 6;
-
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // 7 SEGMENT NUMBERS FOR MOST SIGNIFANCT FIRST
 byte one =    B00000110;
 byte two =    B11101100;
@@ -110,8 +109,7 @@ byte offBit = B00000000;
 
 byte inputBit = B00000000;
 
-// TIME BETWEEN PRINTS
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// TIME BETWEEN PRINT++++++++++++++++++++++++++++++++++++++++++++++++++++++
 int time_5bit = 32;
 int time_6bit = 64;
 int time_7bit = 128;
@@ -140,7 +138,7 @@ bool mode_5 = false;
 int counter_1 = 0;
 int counter_2 = 0;
 int counter_3 = 0;
-
+// ############################################################################
 int dipRead;
 int dipValue;
 int dipMap;
@@ -148,6 +146,17 @@ int lightSense;
 
 byte bitState;
 int hertz;
+
+//TIME Variables
+int thisYear ;
+int thisMonth ;
+int thisDay ;
+int thisHour ;
+int thisMinute ;
+int thisSecond ;
+
+int minuteTen;
+int minuteUnit;
 
 // ############################################################################
 //    SUB ROUTINES
@@ -199,6 +208,33 @@ void printInputWord(byte insertOne, byte insertTwo, byte insertThree) //places t
   shiftOut(dataPinSEG, clockPinSEG, LSBFIRST, insertTwo);
   shiftOut(dataPinSEG, clockPinSEG, LSBFIRST, insertOne);
   digitalWrite(latchPinSEG, HIGH);
+}
+
+void inputSeg(byte insertOne, byte insertTwo, byte insertThree) //places the varibles on which they are written prints three letters to 7 segment
+{
+  digitalWrite(latchPinSEG, LOW);
+  shiftOut(dataPinSEG, clockPinSEG, LSBFIRST, insertThree);
+  shiftOut(dataPinSEG, clockPinSEG, LSBFIRST, insertTwo);
+  shiftOut(dataPinSEG, clockPinSEG, LSBFIRST, insertOne);
+  digitalWrite(latchPinSEG, HIGH);
+}
+void countNumber() // count using stateOne, Two and Three, gets to 10 and restsarts.
+{
+  stateOne++;
+  if (stateOne == 10)
+  {
+    stateOne = 0;
+    stateTwo++;
+  }
+  if (stateTwo == 10)
+  {
+    stateTwo = 0;
+    stateThree++;
+  }
+  if (stateThree == 10)
+  {
+    stateThree = 0;
+  }
 }
 void sortNumber() //takes the variable stateOne, stateTwo and stateThree and returns the number_one, number_two, number_three variables
 {
@@ -307,25 +343,7 @@ void printNumber() //prints to the 7 segment using the number_one, two and three
   shiftOut(dataPinSEG, clockPinSEG, LSBFIRST, number_three);
   digitalWrite(latchPinSEG, HIGH);
 }
-void countNumber()
-{
-  stateOne++;
-  if (stateOne == 10)
-  {
-    stateOne = 0;
-    stateTwo++;
-  }
-  if (stateTwo == 10)
-  {
-    stateTwo = 0;
-    stateThree++;
-  }
-  if (stateThree == 10)
-  {
-    stateThree = 0;
-  }
-}
-void serialPrintTime()
+void serialPrintTime()  //print the current time
 {
   DateTime now = rtc.now();
   Serial.print(now.year(), DEC);
@@ -509,7 +527,7 @@ void startRoutine()
   Serial.println("| READY |");
   Serial.println("--------------------------------");
 }
-void  dipSwitchReading()
+void dipSwitchReading() //take a reading from the 4 pin dip switch
 {
   dipRead = analogRead(dipPin);
   dipMap = map(dipRead,  0, 1024, 0, 100);
@@ -637,21 +655,117 @@ void setup()
 void loop()
 {
 
-  hoursTillXmas();
+  // hoursTillXmas();
 
-  LED_greenON();
-  delay(time_9bit);
+  DateTime now = rtc.now();
+
+  thisYear = (now.year());
+  thisMonth = (now.month());
+  thisDay = (now.day());
+  thisHour = (now.hour());
+  thisMinute =(now.minute());
+  thisSecond = (now.second());
+
+if (thisMinute < 10)
+{
+    minuteTen = 0;
+    minuteUnit = thisMinute;
+}
+if (thisMinute > 9)
+{
+  minuteTen = thisMinute / 10;
+  minuteUnit = thisMinute - (minuteTen * 10);
+}
 
 
-  LED_yellowON();
-  delay(time_9bit);
+switch (minuteTen) {
+  case 0:
+  number_one = zero;
+  break;
+  case 1:
+  number_one = one;
+  break;
+  case 2:
+  number_one = two;
+  break;
+  case 3:
+  number_one = three;
+  break;
+  case 4:
+  number_one = four;
+  break;
+  case 5:
+  number_one = five;
+  break;
+  case 6:
+  number_one = six;
+  break;
+  case 7:
+  number_one = seven;
+  break;
+  case 8:
+  number_one = eight;
+  break;
+  case 9:
+  number_one = nine;
+  break;
+}
+switch (minuteUnit) {
+  case 0:
+  number_two = zero;
+  break;
+  case 1:
+  number_two = one;
+  break;
+  case 2:
+  number_two = two;
+  break;
+  case 3:
+  number_two = three;
+  break;
+  case 4:
+  number_two = four;
+  break;
+  case 5:
+  number_two = five;
+  break;
+  case 6:
+  number_two = six;
+  break;
+  case 7:
+  number_two = seven;
+  break;
+  case 8:
+  number_two = eight;
+  break;
+  case 9:
+  number_two = nine;
+  break;
+}
+number_three = offBit;
+
+digitalWrite(latchPinSEG, LOW);
+shiftOut(dataPinSEG, clockPinSEG, LSBFIRST, number_three);
+shiftOut(dataPinSEG, clockPinSEG, LSBFIRST, number_two);
+shiftOut(dataPinSEG, clockPinSEG, LSBFIRST, number_one);
+digitalWrite(latchPinSEG, HIGH);
+
+delay(2000);
 
 
-  LED_redON();
-  delay(time_9bit);
 
-  LED_clear();
-  delay(time_10bit);
+
+  // if (thisSecond % 10 == 0)
+  // {
+    //   LED_greenON();
+    //   delay(time_9bit);
+    //   delay(1000);
+    // }
+    // if (thisSecond % 10 != 0)
+    // {
+      //   LED_clear();
+      //   delay(time_9bit);
+      // }
 
 
 }
