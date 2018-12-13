@@ -44,7 +44,7 @@ byte letterE = B11111000;
 byte letterF = B10111000;
 byte letterG = B01111110;
 byte letterH = B10110110;
-byte letterI= B10010000;
+byte letterI = B10010000;
 byte letterJ = B01000110;
 byte letterL = B11010000;
 
@@ -62,32 +62,7 @@ byte letterZ = B11101100;
 byte letterX= B00000000;
 byte letterDash= B00100000;
 
-//start screen stuff
-byte ani_L1 =  B01000000;
-byte ani_L2 = B11000000;
-byte ani_L3 = B11010000;
-byte ani_L4 = B11011000;
-byte ani_L5 = B10011000;
-byte ani_L6 = B01011000;
-byte ani_L7 = B11001000;
-byte ani_L8 = B11010000;
-byte ani_L10 = B10011000;
-byte ani_L11 = B00011000;
-byte ani_L12 = B00001000;
-byte ani_L13 = B00000000;
 
-byte ani_R1 = B00001000;
-byte ani_R2 =B00001100;
-byte ani_R3 =B00001110;
-byte ani_R4 =B01001110;
-byte ani_R5 =B01000110;
-byte ani_R6 =B01001010;
-byte ani_R7 =B01001100;
-byte ani_R8 =B00001110;
-byte ani_R10 =B01000110;
-byte ani_R11 =B01000010;
-byte ani_R12 =B01000000;
-byte ani_R13 =B00000000;
 
 //  LED ARRAGEMENTS AND COULOURS
 byte greenOne = B10000101;
@@ -195,27 +170,27 @@ void LED_ONE(byte insertByte_0, byte insertByte_1)
   shiftOut(dataPinLED_1, clockPinLED_1, LSBFIRST, insertByte_1);
   digitalWrite(latchPinLED_1, HIGH);
 }
-void LED_greenON()
+void grnLED()
 {
   LED_ONE(greenOne, greenTwo);
 }
-void LED_yellowON()
+void yelLED()
 {
   LED_ONE(yellowOne, yellowTwo);
 }
-void LED_redON()
+void redLED()
 {
   LED_ONE(redOne, redTwo);
 }
-void LED_greenYellowON()
+void grnYelLED()
 {
   LED_ONE(greenYellowOne, greenYellowTwo);
 }
-void LED_greenRedON() // turn both green and red leds on
+void grnRedLED() // turn both green and red leds on
 {
   LED_ONE(greenRedOne, greenRedTwo);
 }
-void LED_clear() // turn all LEDS off
+void clrLED() // turn all LEDS off
 {
   LED_ONE(offBit, offBit);
 }
@@ -927,31 +902,31 @@ void printCurretTime()
 
   sendTime(non, non, non);
   delay(prints);
-  LED_greenON();
+  grnLED();
   sendTime(non, non, hTen);
   delay(prints);
-  LED_yellowON();
+  yelLED();
   sendTime(non, hTen, hUnt);
   delay(prints);
-  LED_redON();
+  redLED();
   sendTime(hTen, hUnt, dash);
   delay(prints);
-    LED_greenON();
+  grnLED();
   sendTime(hUnt, dash, mTen);
   delay(prints);
-    LED_yellowON();
+  yelLED();
   sendTime(dash, mTen, mUnt);
   delay(prints);
-    LED_redON();
+  redLED();
   sendTime(mTen, mUnt, non);
   delay(prints);
-    LED_greenON();
+  grnLED();
   sendTime(mUnt, non, non);
   delay(prints);
-      LED_yellowON();
+  yelLED();
   sendTime(non, non, non);
   delay(prints);
-  LED_redON();
+  redLED();
 }
 
 
@@ -1000,128 +975,113 @@ void startRoutine()
   delay(time_7bit);
 
   Serial.print(">>SHFT_REG_7SEG ");
+  //start screen stuff
 
 
-  printInputWord(offBit, letterH, offBit);
-  delay(time_5bit);
-  printInputWord(ani_L1, letterH,ani_R1 );
-  delay(time_5bit);
-  printInputWord(ani_L2, letterH, ani_R2);
-  delay(time_5bit);
-  printInputWord(ani_L3, letterH, ani_R3);
-  delay(time_5bit);
-  printInputWord(ani_L4, letterH, ani_R4);
-  delay(time_5bit);
-  printInputWord(ani_L5, letterH, ani_R5);
-  delay(time_5bit);
-  printInputWord(ani_L6, letterH, ani_R6);
-  delay(time_5bit);
-  printInputWord(ani_L7, letterH, ani_R7);
-  delay(time_5bit);
-  printInputWord(ani_L8, letterH, ani_R8);
-  delay(time_5bit);
-  printInputWord(ani_L4, letterH, ani_R4);
-  delay(time_5bit);
-  printInputWord(ani_L5, letterH, ani_R5);
-  delay(time_5bit);
-  printInputWord(ani_L6, letterH, ani_R6);
-  delay(time_5bit);
-  printInputWord(ani_L7, letterH, ani_R7);
-  delay(time_5bit);
-  printInputWord(ani_L8, letterH, ani_R8);
-  delay(time_5bit);
-  printInputWord(ani_L4, letterH, ani_R4);
-  delay(time_5bit);
-  printInputWord(ani_L5, letterH, ani_R5);
-  delay(time_5bit);
-  printInputWord(ani_L6, letterH, ani_R6);
-  delay(time_5bit);
-  printInputWord(ani_L7, letterH, ani_R7);
-  delay(time_5bit);
-  printInputWord(ani_L8, letterH, ani_R8);
-  delay(time_5bit);
+  byte segTT = B00001000;
+  byte segTR = B00000100;
+  byte segBR = B00000010;
+  byte segBB = B01000000;
+  byte segBL = B10000000;
+  byte segTL = B00010000;
+  byte segMM = B00100000;
 
-  printInputWord(ani_L4, letterH, ani_R4);
-  delay(time_8bit);
+  //          __
+  //        |   |
+  //         __
+  //       |   |
+  //        __
 
-  printInputWord(ani_L4, letterH, ani_R4);
-  delay(time_7bit);
-  printInputWord(offBit, letterH, offBit);
-  delay(time_5bit);
 
-  printInputWord(ani_L4, letterH, ani_R4);
-  delay(time_7bit);
-  printInputWord(offBit, letterH, offBit);
-  delay(time_5bit);
+  int printDelay = time_6bit;
 
-  printInputWord(ani_L4, letterH, ani_R4);
-  delay(time_8bit);
+  printInputWord(offBit, offBit, offBit);
+  delay(printDelay);
+  printInputWord(offBit, segTT, offBit);
+  delay(printDelay);
 
-  printInputWord(ani_L5, letterH, ani_R5);
-  delay(time_7bit);
-  printInputWord(ani_L6, letterH, ani_R6);
-  delay(time_7bit);
-  printInputWord(ani_L7, letterH, ani_R7);
-  delay(time_7bit);
-  printInputWord(ani_L8, one, ani_R8);
-  delay(time_7bit);
-  printInputWord(ani_L4, one, ani_R4);
-  delay(time_7bit);
-  printInputWord(ani_L10, one, ani_R10);
-  delay(time_7bit);
-  printInputWord(ani_L11, two, ani_R11);
-  delay(time_7bit);
-  printInputWord(ani_L12, two, ani_R12);
-  delay(time_7bit);
-  printInputWord(ani_L13, two, ani_R13);
-  delay(time_7bit);
-  printInputWord(letterR, three, letterY);
-  delay(time_5bit);
-  printInputWord(letterR, three, letterY);
-  delay(time_5bit);
-  printInputWord(letterR, three, letterY);
+  for(int x =0; x < 3; x++) //make outside lines spin
+  {
+    printInputWord(offBit, segTT, segTT);
+    delay(printDelay);
+    printInputWord(offBit, offBit, segTT | segTR);
+    delay(printDelay);
+    printInputWord(offBit, offBit, segTR | segBR);
+    delay(printDelay);
+    printInputWord(offBit, offBit, segBR | segBB);
+    delay(printDelay);
+    printInputWord(offBit, segBB, segBB );
+    delay(printDelay);
+    printInputWord(segBB, segBB, offBit );
+    delay(printDelay);
+    printInputWord(segBB | segBL, offBit, offBit );
+    delay(printDelay);
+    printInputWord(segBL | segTL, offBit, offBit );
+    delay(printDelay);
+    printInputWord(segTL | segTT, offBit, offBit );
+    delay(printDelay);
+    printInputWord(segTT, segTT, offBit );
+    delay(printDelay);
+  }
+  printInputWord(offBit, segTT, offBit );
+  delay(printDelay);
+  printInputWord(offBit, offBit, offBit);
+
+for(int y = 0; y < 3; y++)
+{
+  printInputWord(offBit, offBit, offBit);
+  delay(printDelay);
+  printInputWord(segMM, offBit, offBit);
+  delay(printDelay);
+  printInputWord(segMM, segMM, offBit);
+  delay(printDelay);
+  printInputWord(offBit, segMM, segMM);
+  delay(printDelay);
+  printInputWord(offBit, offBit, segMM);
+  delay(printDelay);
+  printInputWord(offBit, offBit, offBit);
+  delay(printDelay);
+  printInputWord(offBit, offBit, segMM);
+  delay(printDelay);
+  printInputWord(offBit, segMM, segMM);
+  delay(printDelay);
+  printInputWord(segMM, segMM, offBit);
+  delay(printDelay);
+  printInputWord(segMM, offBit, offBit);
+  delay(printDelay);
+  printInputWord(offBit, offBit, offBit);
+}
+
+  for (int z = 0; z<3;z++)
+  {
+    printInputWord(segTT | segMM | segBB, segTT | segMM | segBB, segTT | segMM  | segBB );
+    delay(printDelay);
+    printInputWord(offBit, offBit, offBit);
+    delay(printDelay);
+  }
   delay(time_5bit);
   Serial.println("| READY |");
   delay(time_8bit);
 
   Serial.print(">>SHFT_REG_LED1 ");
-  LED_greenON();
-  delay(time_6bit);
-  LED_clear();
-  delay(time_5bit);
 
-  LED_yellowON();
-  delay(time_6bit);
-  LED_clear();
-  delay(time_5bit);
-  LED_redON();
-  delay(time_6bit);
-  LED_clear();
-  delay(time_5bit);
-  LED_greenON();
-  delay(time_6bit);
-  LED_clear();
-  delay(time_5bit);
-  LED_yellowON();
-  delay(time_6bit);
-  LED_clear();
-  delay(time_5bit);
-  LED_redON();
-  delay(time_6bit);
-  LED_clear();
-  delay(time_5bit);
-  LED_greenON();
-  delay(time_6bit);
-  LED_clear();
-  delay(time_5bit);
-  LED_yellowON();
-  delay(time_6bit);
-  LED_clear();
-  delay(time_5bit);
-  LED_redON();
-  delay(time_6bit);
-  LED_clear();
-  delay(time_5bit);
+  int timeFlash = time_6bit;
+
+  for (int v = 0; v<3 ; v++)
+  {
+  yelLED();
+  delay(timeFlash);
+  clrLED();
+  delay(timeFlash);
+  redLED();
+  delay(timeFlash);
+  clrLED();
+  delay(timeFlash);
+  grnLED();
+  delay(timeFlash);
+  clrLED();
+  delay(timeFlash);
+}
   Serial.println("| READY |");
   Serial.println("--------------------------------");
 }
@@ -1162,7 +1122,7 @@ void loop()
       getCurrentTime();
       printCurretTime();
     }
-    mode_2 = 0;
+    mode_2 = 0; // allows
   }
 
   if(thisMinute != 36)
@@ -1173,20 +1133,20 @@ void loop()
   if(digitalRead(PIR_Pin) == HIGH && mode_2 == 0)
   {
     mode_2 = 1;
-    
+
   }
 
 
 
   // if (thisSecond % 10 == 0)
   // {
-  //   LED_greenON();
+  //   grnLED();
   //   delay(time_9bit);
   //   delay(1000);
   // }
   // if (thisSecond % 10 != 0)
   // {
-  //   LED_clear();
+  //   clrLED();
   //   delay(time_9bit);
   // }
   // unsigned long finishTime = micros();
