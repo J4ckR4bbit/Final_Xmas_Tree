@@ -1162,14 +1162,18 @@ void loop()
       getCurrentTime();
       printCurretTime();
     }
+    mode_2 = 0;
   }
-
-  // unsigned long startTime = micros();
-
 
   if(thisMinute != 36)
   {
     hoursTillXmas();
+  }
+
+  if(digitalRead(PIR_Pin) == HIGH && mode_2 == 0)
+  {
+    mode_2 = 1;
+    
   }
 
 
