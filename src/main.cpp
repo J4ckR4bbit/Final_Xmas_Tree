@@ -157,6 +157,7 @@ word mUnt;
 word sTen;
 word sUnt;
 
+int LED_Num = 0;
 
 // ############################################################################
 //    SUB ROUTINES
@@ -189,6 +190,24 @@ void grnYelLED()
 void grnRedLED() // turn both green and red leds on
 {
   LED_ONE(greenRedOne, greenRedTwo);
+}
+
+void ledRoll()
+{
+  LED_Num++;
+  if (LED_Num == 1)
+  {
+    grnLED();
+  }
+  if (LED_Num == 2)
+  {
+    yelLED();
+  }
+  if (LED_Num == 3)
+  {
+    redLED();
+    LED_Num = 0;
+  }
 }
 void clrLED() // turn all LEDS off
 {
@@ -360,7 +379,6 @@ void serialPrintTime()  //print the current time
   Serial.print(now.second(), DEC);
   Serial.println();
 }
-
 void dipSwitchReading() //take a reading from the 4 pin dip switch
 {
   dipRead = analogRead(dipPin);
@@ -436,31 +454,6 @@ void hoursTillXmas() //print the hours until christmas
   sortNumber();
   printNumber();
 }
-void sendFirstThree(byte insertLetter_0, byte insertLetter_1, byte insertLetter_2 )
-{
-  printInputWord(letterX, letterX, letterX);
-
-  printInputWord(letterX, letterX, insertLetter_0);
-
-  printInputWord(letterX, insertLetter_0, insertLetter_1);
-
-  printInputWord(insertLetter_0, insertLetter_1, insertLetter_2);
-}
-void sendWordThree(byte insertLetter_3, byte insertLetter_4, byte insertLetter_5 )
-{
-  printInputWord(insertLetter_3, insertLetter_4, insertLetter_5);
-
-}
-void sendLastThree(byte insertLetter_6, byte insertLetter_7, byte insertLetter_8 )
-{
-  printInputWord(insertLetter_6, insertLetter_7, insertLetter_8);
-
-  printInputWord(insertLetter_7, insertLetter_8, letterX);
-
-  printInputWord(insertLetter_8, letterX, letterX);
-
-  printInputWord(letterX, letterX, letterX);
-}
 
 void sendTime(word insertT_0, word insertT_1, word insertT_2 )
 {
@@ -470,8 +463,18 @@ void sendTime(word insertT_0, word insertT_1, word insertT_2 )
   shiftOut(dataPinSEG, clockPinSEG, LSBFIRST, insertT_0);
   digitalWrite(latchPinSEG, HIGH);
 }
-
 void getCurrentTime()
+{
+  DateTime now = rtc.now();
+
+  thisYear = (now.year());
+  thisMonth = (now.month());
+  thisDay = (now.day());
+  thisHour = (now.hour());
+  thisMinute =(now.minute());
+  thisSecond = (now.second());
+}
+void getPrintCurrentTime()
 {
   DateTime now = rtc.now();
 
@@ -496,7 +499,7 @@ void getCurrentTime()
   Serial.println();
 
 }
-void printCurretTime()
+void printCurretDate()  //print the time and date on the 7 segment
 {
   getCurrentTime();
 
@@ -928,9 +931,289 @@ void printCurretTime()
   delay(prints);
   redLED();
 }
+void printCurretTime()  //print the time on the 7 segment
+{
+  getCurrentTime();
+
+  Serial.print("----------------");
+  Serial.print("thisHour");
+  Serial.print(":");
+  Serial.println(thisHour);
+
+  if (thisHour < 10)//day into tens and units greater than 0
+  {
+    hourTen = 0;
+    hourUnit = thisHour;
+  }
+  if (thisHour > 9)  //day into tens and units less than 9
+  {
+    hourTen = thisHour / 10;
+    hourUnit = thisHour - (hourTen * 10);
+  }
+  Serial.print("hourTen");
+  Serial.print(":");
+  Serial.println(hourTen);
+  Serial.print("hourUnit");
+  Serial.print(":");
+  Serial.println(hourUnit);
+
+  Serial.print("thisMinute");
+  Serial.print(":");
+  Serial.println(thisMinute);
 
 
-void startRoutine()
+  if (thisMinute < 10)
+  {
+    minuteTen = 0;
+    minuteUnit = thisMinute;
+  }
+  if (thisMinute > 9)
+  {
+    minuteTen = thisMinute / 10;
+    minuteUnit = thisMinute - (minuteTen * 10);
+  }
+  Serial.print("minuteTen");
+  Serial.print(":");
+  Serial.println(minuteTen);
+  Serial.print("minuteUnit");
+  Serial.print(":");
+  Serial.println(minuteUnit);
+  // =------------------------------------------------------------------
+
+  switch (hourTen)
+  {
+    case 0:
+    hTen = zero;
+    break;
+    case 1:
+    hTen = one;
+    break;
+    case 2:
+    hTen = two;
+    break;
+    case 3:
+    hTen = three;
+    break;
+    case 4:
+    hTen = four;
+    break;
+    case 5:
+    hTen = five;
+    break;
+    case 6:
+    hTen = six;
+    break;
+    case 7:
+    hTen = seven;
+    break;
+    case 8:
+    hTen = eight;
+    break;
+    case 9:
+    hTen = nine;
+    break;
+  }
+  switch (hourUnit)
+  {
+    case 0:
+    hUnt = zero;
+    break;
+    case 1:
+    hUnt = one;
+    break;
+    case 2:
+    hUnt = two;
+    break;
+    case 3:
+    hUnt = three;
+    break;
+    case 4:
+    hUnt = four;
+    break;
+    case 5:
+    hUnt = five;
+    break;
+    case 6:
+    hUnt = six;
+    break;
+    case 7:
+    hUnt = seven;
+    break;
+    case 8:
+    hUnt = eight;
+    break;
+    case 9:
+    hUnt = nine;
+    break;
+  }
+
+  switch (minuteTen)
+  {
+    case 0:
+    mTen = zero;
+    break;
+    case 1:
+    mTen = one;
+    break;
+    case 2:
+    mTen = two;
+    break;
+    case 3:
+    mTen = three;
+    break;
+    case 4:
+    mTen = four;
+    break;
+    case 5:
+    mTen = five;
+    break;
+    case 6:
+    mTen = six;
+    break;
+    case 7:
+    mTen = seven;
+    break;
+    case 8:
+    mTen = eight;
+    break;
+    case 9:
+    mTen = nine;
+    break;
+  }
+  switch (minuteUnit)
+  {
+    case 0:
+    mUnt = zero;
+    break;
+    case 1:
+    mUnt = one;
+    break;
+    case 2:
+    mUnt = two;
+    break;
+    case 3:
+    mUnt = three;
+    break;
+    case 4:
+    mUnt = four;
+    break;
+    case 5:
+    mUnt = five;
+    break;
+    case 6:
+    mUnt = six;
+    break;
+    case 7:
+    mUnt = seven;
+    break;
+    case 8:
+    mUnt = eight;
+    break;
+    case 9:
+    mUnt = nine;
+    break;
+  }
+
+  int prints = 256;
+  byte dash = letterDash;
+  byte non = letterX;
+
+  sendTime(non, non, non);
+  delay(prints);
+  grnLED();
+  sendTime(non, non, hTen);
+  delay(prints);
+  yelLED();
+  sendTime(non, hTen, hUnt);
+  delay(prints);
+  redLED();
+  sendTime(hTen, hUnt, dash);
+  delay(prints);
+  grnLED();
+  sendTime(hUnt, dash, mTen);
+  delay(prints);
+  yelLED();
+  sendTime(dash, mTen, mUnt);
+  delay(prints);
+  redLED();
+  sendTime(mTen, mUnt, non);
+  delay(prints);
+  grnLED();
+  sendTime(mUnt, non, non);
+  delay(prints);
+  yelLED();
+  sendTime(non, non, non);
+  delay(prints);
+  redLED();
+}
+
+//    SENDING WORDS TO THE SEVEN SEGMENT DISPLAY
+void sendFirstThree(byte insertLetter_0, byte insertLetter_1, byte insertLetter_2 )
+{
+
+  printInputWord(letterX, letterX, letterX);
+  ledRoll();
+  delay(time_8bit);
+
+  printInputWord(letterX, letterX, insertLetter_0);
+  ledRoll();
+  delay(time_8bit);
+
+  printInputWord(letterX, insertLetter_0, insertLetter_1);
+  ledRoll();
+  delay(time_8bit);
+
+  printInputWord(insertLetter_0, insertLetter_1, insertLetter_2);
+  ledRoll();
+  delay(time_8bit);
+}
+void sendWordThree(byte insertLetter_3, byte insertLetter_4, byte insertLetter_5 )
+{
+  printInputWord(insertLetter_3, insertLetter_4, insertLetter_5);
+  ledRoll();
+  delay(time_8bit);
+
+}
+void sendLastThree(byte insertLetter_6, byte insertLetter_7, byte insertLetter_8 )
+{
+
+  printInputWord(insertLetter_6, insertLetter_7, insertLetter_8);
+  ledRoll();
+  delay(time_8bit);
+
+  printInputWord(insertLetter_7, insertLetter_8, letterX);
+  ledRoll();
+  delay(time_8bit);
+
+  printInputWord(insertLetter_8, letterX, letterX);
+  ledRoll();
+  delay(time_8bit);
+
+  printInputWord(letterX, letterX, letterX);
+  ledRoll();
+  delay(time_8bit);
+
+}
+void printHappyHolidays() // write out "HAPPY HOLIDAYS"
+{
+
+    sendFirstThree(letterH, letterA, letterP);
+    sendWordThree(letterA, letterP, letterP);
+    sendWordThree(letterP, letterP, letterY);
+    sendWordThree(letterP, letterY, letterX);
+    sendWordThree(letterY,letterX, letterH);
+    sendWordThree(letterX, letterH, letterO);
+    sendWordThree(letterH, letterO, letterL);
+    sendWordThree(letterO, letterL, letterI);
+    sendWordThree(letterL, letterI, letterD);
+    sendWordThree(letterI, letterD, letterA);
+    sendWordThree(letterD, letterA, letterY);
+    sendLastThree(letterA, letterY,letterS);
+
+}
+
+
+void startRoutine()   //send the start routine
 {
   Serial.println("");
   Serial.println("");
@@ -986,12 +1269,6 @@ void startRoutine()
   byte segTL = B00010000;
   byte segMM = B00100000;
 
-  //          __
-  //        |   |
-  //         __
-  //       |   |
-  //        __
-
 
   int printDelay = time_6bit;
 
@@ -1027,30 +1304,30 @@ void startRoutine()
   delay(printDelay);
   printInputWord(offBit, offBit, offBit);
 
-for(int y = 0; y < 3; y++)
-{
-  printInputWord(offBit, offBit, offBit);
-  delay(printDelay);
-  printInputWord(segMM, offBit, offBit);
-  delay(printDelay);
-  printInputWord(segMM, segMM, offBit);
-  delay(printDelay);
-  printInputWord(offBit, segMM, segMM);
-  delay(printDelay);
-  printInputWord(offBit, offBit, segMM);
-  delay(printDelay);
-  printInputWord(offBit, offBit, offBit);
-  delay(printDelay);
-  printInputWord(offBit, offBit, segMM);
-  delay(printDelay);
-  printInputWord(offBit, segMM, segMM);
-  delay(printDelay);
-  printInputWord(segMM, segMM, offBit);
-  delay(printDelay);
-  printInputWord(segMM, offBit, offBit);
-  delay(printDelay);
-  printInputWord(offBit, offBit, offBit);
-}
+  for(int y = 0; y < 3; y++)
+  {
+    printInputWord(offBit, offBit, offBit);
+    delay(printDelay);
+    printInputWord(segMM, offBit, offBit);
+    delay(printDelay);
+    printInputWord(segMM, segMM, offBit);
+    delay(printDelay);
+    printInputWord(offBit, segMM, segMM);
+    delay(printDelay);
+    printInputWord(offBit, offBit, segMM);
+    delay(printDelay);
+    printInputWord(offBit, offBit, offBit);
+    delay(printDelay);
+    printInputWord(offBit, offBit, segMM);
+    delay(printDelay);
+    printInputWord(offBit, segMM, segMM);
+    delay(printDelay);
+    printInputWord(segMM, segMM, offBit);
+    delay(printDelay);
+    printInputWord(segMM, offBit, offBit);
+    delay(printDelay);
+    printInputWord(offBit, offBit, offBit);
+  }
 
   for (int z = 0; z<3;z++)
   {
@@ -1069,19 +1346,19 @@ for(int y = 0; y < 3; y++)
 
   for (int v = 0; v<3 ; v++)
   {
-  yelLED();
-  delay(timeFlash);
-  clrLED();
-  delay(timeFlash);
-  redLED();
-  delay(timeFlash);
-  clrLED();
-  delay(timeFlash);
-  grnLED();
-  delay(timeFlash);
-  clrLED();
-  delay(timeFlash);
-}
+    yelLED();
+    delay(timeFlash);
+    clrLED();
+    delay(timeFlash);
+    redLED();
+    delay(timeFlash);
+    clrLED();
+    delay(timeFlash);
+    grnLED();
+    delay(timeFlash);
+    clrLED();
+    delay(timeFlash);
+  }
   Serial.println("| READY |");
   Serial.println("--------------------------------");
 }
@@ -1115,29 +1392,39 @@ void loop()
 
   getCurrentTime();
 
-  if(thisMinute % 5 == 0 && thisSecond < 20)
-  {
-    for (int x = 0; x<5;x++)
-    {
-      getCurrentTime();
-      printCurretTime();
-    }
-    mode_2 = 0; // allows
-  }
+  // if(thisMinute % 5 == 0 && thisSecond < 20)
+  // {
+  //   for (int x = 0; x<5;x++)
+  //   {
+  printCurretTime();  delay(time_10bit);
+  //   }
+  //   mode_2 = 0; // allows
+  // }
 
-  if(thisMinute != 36)
-  {
-    hoursTillXmas();
-  }
+  // if(thisMinute % 2 == 0 && thisSecond < 20)
+  // {
+  //   for (int x = 0; x<5;x++)
+  //   {
+  printHappyHolidays(); delay(time_10bit);
+  // }
 
-  if(digitalRead(PIR_Pin) == HIGH && mode_2 == 0)
-  {
-    mode_2 = 1;
-
-  }
+  // }
 
 
 
+  // if(thisMinute != 36)
+  // {
+  //   hoursTillXmas();
+  // }
+  //
+  // if(digitalRead(PIR_Pin) == HIGH && mode_2 == 0)
+  // {
+  //   mode_2 = 1;
+  //
+  // }
+
+
+  //
   // if (thisSecond % 10 == 0)
   // {
   //   grnLED();
