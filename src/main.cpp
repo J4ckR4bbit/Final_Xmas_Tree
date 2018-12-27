@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <Arduino.h>
 // Date and time functions using a DS3231 RTC connected via I2C and Wire lib
 #include <Wire.h>
 #include "RTClib.h"
@@ -340,7 +341,7 @@ void ledRollFlashGreen(int grnFlash)
     delay(grnFlash);
     grnRedLED();
     delay(grnFlash);
-    clrLED();
+    // clrLED();
   }
   if (LED_Num_FlashG == 2)
   {
@@ -350,7 +351,7 @@ void ledRollFlashGreen(int grnFlash)
     delay(grnFlash);
     grnYelLED();
     delay(grnFlash);
-    clrLED();
+    // clrLED();
 
     LED_Num_FlashG = 0;
   }
@@ -1643,41 +1644,41 @@ void loop()
 
   if(digitalRead(PIR_Pin) == HIGH && mode_1 == 0)
   {
-    Serial.print("\t>> PIR_PIN:|HIGH|");
-    randomValue =  random(1, 12);
-    Serial.print("\t## RND_VAL:");
-    Serial.print(randomValue);
-    if(randomValue % 2 == 0)
-    {
-      for(int x= 0; x<3 ; x++)
-      {
-      hoursTillXmasPeriodic();
-      }
-    }
-    if(randomValue == 1)
-    {
-      printHappyHolidays();
-    }
-    if(randomValue == 3)
-    {
-      printHoHo();
-    }
-    if(randomValue == 5)
-    {
-      printJesus();
-    }
-    if (randomValue == 7)
-    {
-      printNoel();
-    }
-    if (randomValue == 9)
-    {
-      printSeasons();
-    }
-    if (randomValue == 11)
-    {
-      printHappyNewYear();
-    }
+    // Serial.print("\t>> PIR_PIN:|HIGH|");
+    // randomValue =  random(1, 12);
+    // Serial.print("\t## RND_VAL:");
+    // Serial.print(randomValue);
+    // if(randomValue % 2 == 0)
+    // {
+    //   for(int x= 0; x<3 ; x++)
+    //   {
+    //   hoursTillXmasPeriodic();
+    //   }
+    // }
+    // if(randomValue == 1)
+    // {
+    //   printHappyHolidays();
+    // }
+    // if(randomValue == 3)
+    // {
+    //   printHoHo();
+    // }
+    // if(randomValue == 5)
+    // {
+    //   printJesus();
+    // }
+    // if (randomValue == 7)
+    // {
+    //   printNoel();
+    // }
+    // if (randomValue == 9)
+    // {
+    //   printSeasons();
+    // }
+    // if (randomValue == 11)
+    // {
+    //   printHappyNewYear();
+    // }
 
 
     mode_1 = 1;
@@ -1685,9 +1686,10 @@ void loop()
   if(digitalRead(PIR_Pin) == 1)
   {
     counter_1++;
-    if (counter_1 < 200 )
+    if (counter_1 < 100 )
     {
-      ledRollFlashGreen(time_7bit);
+      ledRollFlashGreen(time_8bit);
+
       Serial.print(".");
     }
   }
@@ -1704,7 +1706,7 @@ void loop()
   if(thisSecond % 20 == 0)
   {
     Serial.print("\t** Flash ");
-    for(int x = 0; x < 2; x++)
+    for(int x = 0; x < 1; x++)
     {
     ledRollFlashGreen(time_7bit);
     delay(time_7bit);
@@ -1723,6 +1725,68 @@ void loop()
     mode_2 = 0; // allows
   }
 
+if(thisMinute % 5 != 0 && thisMinute % 2 == 0 && thisSecond < 10)
+{
+  Serial.print("\t>> PIR_PIN:|HIGH|");
+  randomValue =  random(1, 12);
+  Serial.print("\t## RND_VAL:");
+  Serial.print(randomValue);
+
+  if(randomValue == 0)
+  {
+    printHappyHolidays();
+  }
+
+  if(randomValue == 1)
+  {
+    printHappyHolidays();
+  }
+  if(randomValue == 2)
+  {
+    printHoHo();
+  }
+  if(randomValue == 3)
+  {
+    printHoHo();
+  }
+  if(randomValue == 4)
+  {
+    printJesus();
+  }
+  if(randomValue == 5)
+  {
+    printJesus();
+  }
+  if (randomValue == 6)
+  {
+    printNoel();
+  }
+  if (randomValue == 7)
+  {
+    printNoel();
+  }
+  if (randomValue == 8)
+  {
+    printSeasons();
+  }
+  if (randomValue == 9)
+  {
+    printSeasons();
+  }
+  if (randomValue == 10)
+  {
+    printHappyNewYear();
+  }
+  if (randomValue == 11)
+  {
+    printHappyNewYear();
+  }
+  if (randomValue == 12)
+  {
+    printNoel();
+  }
+
+}
 
 
 //##################################################################33
